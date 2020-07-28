@@ -1,1 +1,56 @@
 
+# create a new database called matches
+use matches
+
+db.match.insertMany([
+   { match_id: 1, player_1: "Michael Tupolev", player_2: "Kathy Chen", match_date: "01/02/2020", minutes:210, result: "player_2 win", note: [{note1: "It is Kathy's first official game."},  {note2: "It is Kathy's first official game."}]},
+   { match_id: 6, player_1: "Tony Gonzalez Jr.", player_2: "Tim Bowman", match_date: "04/30/2020", minutes:112, result: "draw", note: { note1: "Coach of player_1: Tony Gonzalez Sr."}},
+   { match_id: 11, player_1: "Susan Neuswanberg", player_2: "Tim Bowman", match_date: "05/26/2020", minutes:123, result: "player_2 win"},
+   { match_id: 31, player_1: "Susan Neuswanberg", player_2: "Kathy Chen", match_date: "01/02/2020", minutes:89, result: "player_1 win"}
+])
+
+
+#  --------------------
+#  Provide the command that returns the number of documents (count) where the
+#  result is "player_2 win".
+
+db.match.count({"result": "player_2 win"})
+
+
+#  --------------------
+#  Provide the command that returns a count of notes.
+db.match.aggregate([
+  { $unwind : '$note' },
+  { $count : 'note' }
+])
+
+#  --------------------
+#  Provide the command that updates the result attribute for 
+#  game "6" to "player_1 win". Then display the full value of this document 
+#  to confirm your change is successful.
+
+db.match.update(
+   { match_id: 6},
+   { $set: { result: "player_1 win"}
+   }
+);
+
+db.match.find({"match_id": 6});
+
+
+#  ---------------------
+#  Provide the command that returns the average duration of all 
+#  games which contain the word "win" in its result, grouped by 
+#  the type of result (player_1 win or player_2 win).
+
+db.match.aggregate([
+	{$match: {result: { $in: [ /win/ ] }}},
+	{$group: {_id: "$result",
+		  average_duration: { $avg: "$minutes"}}}
+]);
+
+
+
+
+
+
