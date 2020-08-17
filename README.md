@@ -1,7 +1,8 @@
 # MongoDB-for-Big-Data
 
+steps
 1. imports dataset in MongoDB
-2. write queries
+2. queries
 
 resources:
 1. MongoDB documentation: https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/
